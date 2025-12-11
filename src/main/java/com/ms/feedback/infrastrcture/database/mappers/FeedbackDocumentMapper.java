@@ -10,12 +10,12 @@ import org.mapstruct.factory.Mappers;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.ERROR)
 public interface FeedbackDocumentMapper {
 
+    //todo: corrigir essa parte
     FeedbackDocumentMapper INSTANCE = Mappers.getMapper(FeedbackDocumentMapper.class);
 
-    @Mapping(target = "dataCriacao", expression = "java(feedBackDocument.getDataEnvio() != null ? feedBackDocument.getDataEnvio().atOffset(java.time.ZoneOffset.UTC) : null)")
+    @Mapping(target = "dataEnvio", expression = "java(document.getDataEnvio() != null ? document.getDataEnvio().atOffset(java.time.ZoneOffset.UTC) : null)")
     FeedbackDomain toDomain(FeedbackDocument document);
 
-    @Mapping(target = "dataCriacao", expression = "java(feedBackDocument.getDataEnvio() != null ? feedBackDocument.getDataEnvio().toInstant() : null)")
+    @Mapping(target = "dataEnvio", expression = "java(domain.getDataEnvio() != null ? domain.getDataEnvio().toInstant() : null)")
     FeedbackDocument toDocument(FeedbackDomain domain);
-
 }

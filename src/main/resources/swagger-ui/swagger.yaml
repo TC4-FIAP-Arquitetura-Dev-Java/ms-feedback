@@ -1,98 +1,31 @@
 openapi: 3.0.3
+
 info:
-  title: MS Login
-  description: >
-    Microserviço responsável por autenticação, registro e gerenciamento de tokens JWT.
-    Inclui endpoints para **login**, **registro**, **refresh** e **logout**.
-  version: 1.0.1
+  title: API de Gerenciamento de Feedbacks
+  version: 1.0.0
+  description: API para criação, consulta, atualização e remoção de feedbacks.
 
 tags:
-  - name: Autenticação
-    description: Endpoints relacionados ao processo de autenticação, registro e sessão.
+  - name: Feedback
+    description: Operações relacionadas ao gerenciamento de feedbacks.
 
 paths:
-  /register:
+  /feedback:
     post:
-      summary: Registrar um novo usuário
-      description: >
-        Cria um novo usuário com base nas informações fornecidas.  
-        O campo `roleEnum` define o tipo de permissão associada (ex: ADMIN, USER).
-      operationId: register
+      summary: Registrar um novo feedback
+      description: Cria um novo registro de feedback.
+      operationId: createFeedback
       tags:
-        - Autenticação
+        - Feedback
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RegisterRequest'
+              $ref: '#/components/schemas/FeedbackRequest'
       responses:
         '201':
-          description: Usuário registrado com sucesso.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/RegisterResponse'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '409':
-          description: Usuário já existente.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '500':
-          $ref: '#/components/responses/InternalError'
-
-  /login:
-    post:
-      summary: Autenticar usuário e gerar token JWT
-      description: >
-        Valida as credenciais do usuário e retorna um token JWT válido para acesso às APIs protegidas.
-      operationId: login
-      tags:
-        - Autenticação
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/LoginRequest'
-      responses:
-        '200':
-          description: Login realizado com sucesso.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/LoginResponse'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '500':
-          $ref: '#/components/responses/InternalError'
-
-  /refresh:
-    post:
-      summary: Renovar o token JWT
-      description: >
-        Gera um novo token JWT com base em um refresh token válido.
-      operationId: refreshToken
-      tags:
-        - Autenticação
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/RefreshTokenRequest'
-      responses:
-        '200':
-          description: Token renovado com sucesso.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/RefreshResponse'
+          description: Feedback registrado com sucesso.
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -102,174 +35,167 @@ paths:
         '500':
           $ref: '#/components/responses/InternalError'
 
-  /logout:
-    post:
-      summary: Invalidar o token JWT atual (logout)
-      description: >
-        Invalida o token JWT ativo, impedindo seu uso futuro.  
-        Esse processo não requer persistência em banco de dados.
-      operationId: logout
+    get:
       tags:
-        - Autenticação
+        - Feedback
+      summary: Listar feedbacks
+      operationId: listFeedbacks
+      parameters:
+        - name: descricao
+          in: query
+          required: false
+          description: Filtrar feedbacks pela descrição.
+          schema:
+            type: string
+
+        - name: tipoUrgencia
+          in: query
+          required: false
+          description: Filtrar por nível de urgência.
+          schema:
+            $ref: '#/components/schemas/TipoUrgenciaEnum'
+      responses:
+        '200':
+          description: Lista de feedbacks encontrados.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FeedbackResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /feedback/{id}:
+    get:
+      tags:
+        - Feedback
+      summary: Buscar feedback por ID
+      operationId: getFeedbackById
+      parameters:
+        - $ref: '#/components/parameters/PathId'
+      responses:
+        '200':
+          description: Feedback encontrado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FeedbackResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+    put:
+      tags:
+        - Feedback
+      summary: Atualizar um feedback
+      operationId: updateFeedback
+      parameters:
+        - $ref: '#/components/parameters/PathId'
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/LogoutRequest'
+              $ref: '#/components/schemas/FeedbackRequest'
       responses:
-        '200':
-          description: Logout realizado com sucesso.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/LogoutResponse'
+        '204':
+          description: Usuário atualizado com sucesso.
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+    delete:
+      tags:
+        - Feedback
+      summary: Deletar feedback por ID
+      operationId: deleteFeedback
+      parameters:
+        - $ref: '#/components/parameters/PathId'
+      responses:
+        '204':
+          description: Usuário atualizado com sucesso.
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalError'
 
 components:
   schemas:
-    RegisterRequest:
+    FeedbackRequest:
       type: object
       required:
-        - username
-        - password
-        - role
+        - descricao
+        - nota
+        - tipoUrgenciaEnum
       properties:
-        userId:
+        descricao:
           type: string
-          description: ID do usuário (gerado automaticamente)
-          example: 652ff3a9b1c2d40012ab45de
-        username:
-          type: string
-          description: Nome de usuário para login
-          example: joao.silva
-        password:
-          type: string
-          format: password
-          description: Senha do usuário
-          example: $enh@2025
-        roleEnum:
-          $ref: '#/components/schemas/RoleEnum'
+          description: Texto do feedback.
+          example: Excelente atendimento.
+        nota:
+          type: number
+          description: Nota atribuída ao feedback (0 a 10).
+          example: 8
+        tipoUrgenciaEnum:
+          $ref: '#/components/schemas/TipoUrgenciaEnum'
 
-    RegisterResponse:
+    FeedbackResponse:
       type: object
       properties:
-        message:
-          type: string
-          example: Usuário registrado com sucesso.
-        userId:
+        id:
           type: string
           example: 652ff3a9b1c2d40012ab45de
-        username:
+        descricao:
           type: string
-          example: joao.silva
-        roleEnum:
-          $ref: '#/components/schemas/RoleEnum'
-        createdAt:
+          example: Excelente atendimento.
+        nota:
+          type: number
+          example: 8
+        tipoUrgenciaEnum:
+          $ref: '#/components/schemas/TipoUrgenciaEnum'
+        dataEnvio:
           type: string
           format: date-time
           example: 2025-10-22T20:30:00Z
 
-    LoginRequest:
-      type: object
-      required:
-        - username
-        - password
-      properties:
-        username:
-          type: string
-          example: joao.silva
-        password:
-          type: string
-          format: password
-          example: $enh@2025
-
-    RefreshTokenRequest:
-      type: object
-      required:
-        - refreshToken
-      properties:
-        refreshToken:
-          type: string
-          description: Token de atualização JWT
-          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.refreshToken...
-
-    LogoutRequest:
-      type: object
-      required:
-        - refreshToken
-      properties:
-        refreshToken:
-          type: string
-          description: Token JWT que será invalidado
-          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.accessToken...
-
-    LoginResponse:
-      type: object
-      properties:
-        accessToken:
-          type: string
-          description: Token JWT gerado após login
-          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.accessToken...
-        refreshToken:
-          type: string
-          description: Token de atualização
-          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.refreshToken...
-        username:
-          type: string
-          example: joao.silva
-        roleEnum:
-          $ref: '#/components/schemas/RoleEnum'
-        expiresAt:
-          type: string
-          format: string
-          description: Data e hora de expiração do token
-          example: 2025-10-22T23:59:59Z
-        userId:
-          type: string
-          example: 652ff3a9b1c2d40012ab45de
-
-    RefreshResponse:
-      type: object
-      properties:
-        accessToken:
-          type: string
-          description: Token JWT gerado após login
-          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.accessToken...
-        refreshToken:
-          type: string
-          description: Token de atualização
-          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.refreshToken...
-        expiresAt:
-          type: string
-          format: string
-          description: Data e hora de expiração do token
-          example: 2025-10-22T23:59:59Z
-
-    LogoutResponse:
-      type: object
-      properties:
-        message:
-          type: string
-          example: Token invalidado com sucesso.
-        timestamp:
-          type: string
-          format: date-time
-          example: 2025-10-22T20:30:00Z
-
-    RoleEnum:
+    TipoUrgenciaEnum:
       type: string
-      description: Papel do usuário dentro do sistema
+      description: Nível de urgência associado ao feedback.
       enum:
-        - ADMIN
-        - USER
-        - GUEST
-      example: USER
+        - BAIXA
+        - MEDIA
+        - ALTA
+        - URGENTE
+      example: MEDIA
 
     ApiError:
       type: object
@@ -285,11 +211,21 @@ components:
           example: Parâmetros inválidos.
         path:
           type: string
-          example: /login
+          example: /feedback
         timestamp:
           type: string
           format: date-time
           example: 2025-10-11T10:30:00Z
+
+  parameters:
+    PathId:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: string
+      description: ID do usuário (obrigatório para update e delete).
+
 
   responses:
     BadRequest:
@@ -300,14 +236,21 @@ components:
             $ref: '#/components/schemas/ApiError'
 
     Unauthorized:
-      description: Falha de autenticação (token inválido ou expirado).
+      description: Falha de autenticação.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ApiError'
 
     Forbidden:
-      description: Acesso negado (usuário sem permissão).
+      description: Acesso negado.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+
+    NotFound:
+      description: Recurso não encontrado.
       content:
         application/json:
           schema:
