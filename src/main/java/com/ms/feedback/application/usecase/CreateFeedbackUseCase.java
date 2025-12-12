@@ -4,5 +4,5 @@ import com.ms.feedback.domain.model.FeedbackDomain;
 
 public interface CreateFeedbackUseCase {
 
-    FeedbackDomain create(FeedbackDomain feedback);
+    void create(FeedbackDomain feedback);
 }

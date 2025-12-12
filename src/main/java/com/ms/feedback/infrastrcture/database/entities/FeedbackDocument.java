@@ -19,7 +19,7 @@ public class FeedbackDocument {
 
     private Integer nota;
 
-    private TipoUrgenciaEnum tipoUrgencia;
+    private TipoUrgenciaEnum tipoUrgenciaEnum;
 
     @CreatedDate
     private OffsetDateTime dataEnvio;

@@ -9,7 +9,7 @@ public class FeedbackDomain {
     private String id;
     private String descricao;
     private Integer nota;
-    private TipoUrgenciaEnum tipoUrgencia;
+    private TipoUrgenciaEnum tipoUrgenciaEnum;
     private OffsetDateTime dataEnvio;
 
     public String getId() {
@@ -36,12 +36,12 @@ public class FeedbackDomain {
         this.nota = nota;
     }
 
-    public TipoUrgenciaEnum getTipoUrgencia() {
-        return tipoUrgencia;
+    public TipoUrgenciaEnum getTipoUrgenciaEnum() {
+        return tipoUrgenciaEnum;
     }
 
-    public void setTipoUrgencia(TipoUrgenciaEnum tipoUrgencia) {
-        this.tipoUrgencia = tipoUrgencia;
+    public void setTipoUrgenciaEnum(TipoUrgenciaEnum tipoUrgenciaEnum) {
+        this.tipoUrgenciaEnum = tipoUrgenciaEnum;
     }
 
     public OffsetDateTime getDataEnvio() {

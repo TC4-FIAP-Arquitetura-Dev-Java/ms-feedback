@@ -1,5 +1,67 @@
 package com.ms.feedback.entrypoint.controllers;
 
-public class FeedbackController
-{
+import com.ms.feedback.application.usecase.*;
+import com.ms.feedback.domain.model.FeedbackDomain;
+import com.ms.feedback.entrypoint.controllers.mappers.FeedbackDtoMapper;
+import com.ms.feedback.entrypoint.controllers.presenter.FeedbackPresenter;
+import com.ms.loginDomain.FeedbackApi;
+import com.ms.loginDomain.gen.model.FeedbackRequestDto;
+import com.ms.loginDomain.gen.model.FeedbackResponseDto;
+import com.ms.loginDomain.gen.model.TipoUrgenciaEnumDto;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
+import java.util.List;
+
+public class FeedbackController implements FeedbackApi {
+
+    private final GetFeedbackByIdUseCase getFeedbackByIdUseCase;
+    private final ListFeedbackUseCase listFeedbackUseCase;
+    private final CreateFeedbackUseCase createFeedbackUseCase;
+    private final DeleteFeedbackUseCase deleteFeedbackUseCase;
+    private final UpdateFeedbackUseCase updateFeedbackUseCase;
+
+    public FeedbackController(GetFeedbackByIdUseCase getFeedbackByIdUseCase,
+                              ListFeedbackUseCase listFeedbackUseCase,
+                              CreateFeedbackUseCase createFeedbackUseCase,
+                              DeleteFeedbackUseCase deleteFeedbackUseCase,
+                              UpdateFeedbackUseCase updateFeedbackUseCase) {
+        this.getFeedbackByIdUseCase = getFeedbackByIdUseCase;
+        this.listFeedbackUseCase = listFeedbackUseCase;
+        this.createFeedbackUseCase = createFeedbackUseCase;
+        this.deleteFeedbackUseCase = deleteFeedbackUseCase;
+        this.updateFeedbackUseCase = updateFeedbackUseCase;
+    }
+
+    @Override
+    public ResponseEntity<FeedbackResponseDto> _getFeedbackById(String id) {
+        FeedbackDomain feedbackDomain = getFeedbackByIdUseCase.getById(id);
+        FeedbackResponseDto responseDto = FeedbackDtoMapper.INSTANCE.toFeedbackResponseDto(feedbackDomain);
+        return ResponseEntity.ok(responseDto);
+    }
+
+    @Override
+    public ResponseEntity<Void> _createFeedback(FeedbackRequestDto feedbackRequestDto) {
+        FeedbackDomain feedbackDomain = FeedbackPresenter.toFeedbackDomain(feedbackRequestDto);
+        createFeedbackUseCase.create(feedbackDomain);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @Override
+    public ResponseEntity<Void> _updateFeedback(String id, FeedbackRequestDto feedbackRequestDto) {
+        FeedbackDomain feedbackDomain = getFeedbackByIdUseCase.getById(id);
+        updateFeedbackUseCase.update(id, feedbackDomain);
+        return ResponseEntity.noContent().build();
+    }
+
+    @Override
+    public ResponseEntity<Void> _deleteFeedback(String id) {
+        deleteFeedbackUseCase.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @Override
+    public ResponseEntity<List<FeedbackResponseDto>> _listFeedbacks(String descricao, TipoUrgenciaEnumDto tipoUrgencia) {
+        return null;
+    }
 }

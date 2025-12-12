@@ -3,6 +3,7 @@ package com.ms.feedback.application.usecase.implementation;
 import com.ms.feedback.application.gateway.FeedbackGateway;
 import com.ms.feedback.application.usecase.UpdateFeedbackUseCase;
 import com.ms.feedback.domain.model.FeedbackDomain;
+import com.ms.feedback.domain.rules.RequiredFieldsRules;
 
 public class UpdateFeedbackUseCaseImpl implements UpdateFeedbackUseCase {
 
@@ -13,7 +14,14 @@ public class UpdateFeedbackUseCaseImpl implements UpdateFeedbackUseCase {
     }
 
     @Override
-    public FeedbackDomain update(String id, FeedbackDomain feedback) {
-        return null;
+    public void update(String id, FeedbackDomain feedback) {
+        RequiredFieldsRules.checkRequiredFields(feedback);
+        FeedbackDomain domain = feedbackGateway.findById(id).orElse(null);
+
+        domain.setId(feedback.getId());
+        domain.setDescricao(feedback.getDescricao());
+        domain.setNota(feedback.getNota());
+        domain.setTipoUrgenciaEnum(feedback.getTipoUrgenciaEnum());
+        feedbackGateway.save(domain);
     }
 }

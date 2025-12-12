@@ -1,5 +1,6 @@
 package com.ms.feedback.infrastrcture.config.usecase;
 
+import com.ms.feedback.application.gateway.FeedbackGateway;
 import com.ms.feedback.application.usecase.implementation.UpdateFeedbackUseCaseImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -8,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 public class UpdateFeedbackConfig {
 
     @Bean
-    public UpdateFeedbackUseCaseImpl updateFeedbackUseCase() {
-        return null;
+    public UpdateFeedbackUseCaseImpl updateFeedbackUseCase(FeedbackGateway feedbackGateway) {
+        return new UpdateFeedbackUseCaseImpl(feedbackGateway);
     }
 }

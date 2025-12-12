@@ -14,6 +14,6 @@ public class GetFeedbackUseCaseImpl implements GetFeedbackByIdUseCase {
 
     @Override
     public FeedbackDomain getById(String id) {
-        return null;
+        return feedbackGateway.findById(id).orElse(null);
     }
 }
