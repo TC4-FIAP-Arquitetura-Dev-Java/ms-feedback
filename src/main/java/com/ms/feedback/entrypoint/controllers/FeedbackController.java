@@ -8,11 +8,17 @@ import com.ms.loginDomain.FeedbackApi;
 import com.ms.loginDomain.gen.model.FeedbackRequestDto;
 import com.ms.loginDomain.gen.model.FeedbackResponseDto;
 import com.ms.loginDomain.gen.model.TipoUrgenciaEnumDto;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+@Slf4j
+@RestController
+@RequestMapping("/v1")
 public class FeedbackController implements FeedbackApi {
 
     private final GetFeedbackByIdUseCase getFeedbackByIdUseCase;
@@ -61,7 +67,14 @@ public class FeedbackController implements FeedbackApi {
     }
 
     @Override
-    public ResponseEntity<List<FeedbackResponseDto>> _listFeedbacks(String descricao, TipoUrgenciaEnumDto tipoUrgencia) {
+    public ResponseEntity<List<FeedbackResponseDto>> _listFeedbacks(String descricao, TipoUrgenciaEnumDto tipoUrgencia, Integer limit, Integer offset) {
         return null;
     }
+
+//    @Override
+//    public ResponseEntity<List<FeedbackResponseDto>> _listFeedbacks() {
+//        return null;
+////        List<FeedbackDomain> domains = listFeedbackUseCase.findAll(descricao, tipoUrgencia);
+////        return ResponseEntity.ok(FeedbackDtoMapper.INSTANCE.toListFeedbackResponseDto(domains));
+//    }
 }

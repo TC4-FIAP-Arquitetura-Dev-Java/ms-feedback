@@ -40,20 +40,37 @@ paths:
         - Feedback
       summary: Listar feedbacks
       operationId: listFeedbacks
+
       parameters:
         - name: descricao
           in: query
           required: false
-          description: Filtrar feedbacks pela descrição.
+          description: Texto do feedback.
           schema:
             type: string
+            example: Excelente atendimento
 
         - name: tipoUrgencia
           in: query
           required: false
-          description: Filtrar por nível de urgência.
+          description: Nível de urgência do feedback.
           schema:
             $ref: '#/components/schemas/TipoUrgenciaEnum'
+
+        - name: limit
+          in: query
+          required: false
+          description: Limite máxima de registros por página.
+          schema:
+            type: integer
+
+        - name: offset
+          in: query
+          required: false
+          description: Paginação
+          schema:
+            type: integer
+
       responses:
         '200':
           description: Lista de feedbacks encontrados.

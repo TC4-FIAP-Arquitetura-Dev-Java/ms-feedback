@@ -8,6 +8,8 @@ import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.ERROR)
 public interface FeedbackDtoMapper {
 
@@ -18,4 +20,6 @@ public interface FeedbackDtoMapper {
     FeedbackDomain toFeedbackDomain(FeedbackRequestDto feedbackRequestDto);
 
     FeedbackResponseDto toFeedbackResponseDto(FeedbackDomain feedbackDomain);
+
+    List<FeedbackResponseDto> toListFeedbackResponseDto(List<FeedbackDomain> feedbackDomains);
 }
