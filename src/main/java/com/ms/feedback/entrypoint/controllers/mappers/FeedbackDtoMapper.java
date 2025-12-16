@@ -1,8 +1,10 @@
 package com.ms.feedback.entrypoint.controllers.mappers;
 
+import com.ms.feedback.domain.enuns.TipoUrgenciaEnum;
 import com.ms.feedback.domain.model.FeedbackDomain;
 import com.ms.loginDomain.gen.model.FeedbackRequestDto;
 import com.ms.loginDomain.gen.model.FeedbackResponseDto;
+import com.ms.loginDomain.gen.model.TipoUrgenciaEnumDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
@@ -22,4 +24,6 @@ public interface FeedbackDtoMapper {
     FeedbackResponseDto toFeedbackResponseDto(FeedbackDomain feedbackDomain);
 
     List<FeedbackResponseDto> toListFeedbackResponseDto(List<FeedbackDomain> feedbackDomains);
+
+    TipoUrgenciaEnum toTipoUrgenciaEnum(TipoUrgenciaEnumDto dto);
 }

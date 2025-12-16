@@ -5,11 +5,12 @@ import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
-import java.time.OffsetDateTime;
+import java.time.Instant;
 
 @Data
-@Document(collection = "usuario")
+@Document(collection = "feedback")
 public class FeedbackDocument {
 
     @Id
@@ -19,8 +20,9 @@ public class FeedbackDocument {
 
     private Integer nota;
 
+    @Field("tipoUrgencia")
     private TipoUrgenciaEnum tipoUrgenciaEnum;
 
     @CreatedDate
-    private OffsetDateTime dataEnvio;
+    private Instant dataEnvio;
 }
