@@ -9,7 +9,15 @@ public class RequiredFieldsRules {
         if(isNullOrEmpty(feedbackDomain.getDescricao()) &&
                 isNullOrEmpty(feedbackDomain.getNota().toString()) &&
                 isNullOrEmpty(feedbackDomain.getTipoUrgenciaEnum().toString())) {
-            throw new FieldRequiredException("Required fields are mandatory");
+            throw new FieldRequiredException("Todos os campos devem ser preenchidos!");
+        }
+
+        if(feedbackDomain.getNota() < 0){
+            throw new FieldRequiredException("Nota deve ser maior ou igual a 0!");
+        }
+
+        if(feedbackDomain.getNota() > 10){
+            throw new FieldRequiredException("Nota deve ser menor ou igual a 10!");
         }
     }
 

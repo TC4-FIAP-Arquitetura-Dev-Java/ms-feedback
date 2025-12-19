@@ -56,29 +56,33 @@ public class FeedBackGatewayImpl implements FeedbackGateway {
     private Query buildQuery(FeedbackFilter filter) {
         Query query = new Query();
 
+        if(filter == null){
+            filter = new FeedbackFilter();
+        }
+
         // Filtro por Descrição
-        if (filter.descricao() != null && !filter.descricao().isBlank()) {
-            query.addCriteria(Criteria.where("descricao").regex(filter.descricao().trim(), "i"));
+        if (filter.getDescricao() != null && !filter.getDescricao().isBlank()) {
+            query.addCriteria(Criteria.where("descricao").regex(filter.getDescricao().trim(), "i"));
         }
 
         // Filtro por Tipo Urgência
-        if (filter.tipoUrgencia().getDescricao() != null) {
-            String tipoUrgencia = filter.tipoUrgencia().getDescricao();
-            query.addCriteria(Criteria.where("tipoUrgencia").is(tipoUrgencia));
+        if (filter.getTipoUrgencia() != null && filter.getTipoUrgencia().name() != null) {
+            query.addCriteria(Criteria.where("tipoUrgencia").is(filter.getTipoUrgencia().name()));
         }
 
-        //TODO: Terminar o filter e validação
+        //Limit
+        if (filter.getLimit() != null && filter.getLimit() > 0) {
+            query.limit(filter.getLimit());
+        }
 
         // Paginação
-        if (filter.limit() != null && filter.limit() > 0) {
-            if (filter.offset() != null) {
-                int offset = filter.offset();
+        if (filter.getOffset() != null) {
+            int offset = filter.getOffset();
 
-                if (offset < 0) {
-                    offset = 0;
-                }
-                query.skip(offset).limit(filter.limit());
+            if (offset < 0) {
+                offset = 0;
             }
+            query.skip(offset);
         }
         return query;
     }

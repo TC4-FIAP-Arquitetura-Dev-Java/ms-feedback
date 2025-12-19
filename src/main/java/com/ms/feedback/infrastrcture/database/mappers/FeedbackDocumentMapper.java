@@ -20,14 +20,16 @@ public interface FeedbackDocumentMapper {
     FeedbackDocument toDocument(FeedbackDomain domain);
 
     default OffsetDateTime toOffsetDateTime(Instant instant) {
-        return instant != null
-                ? instant.atOffset(ZoneOffset.UTC)
-                : null;
+        if(instant != null) {
+            return instant.atOffset(ZoneOffset.UTC);
+        }
+        return null;
     }
 
     default Instant toInstant(OffsetDateTime offsetDateTime) {
-        return offsetDateTime != null
-                ? offsetDateTime.toInstant()
-                : null;
+        if(offsetDateTime != null) {
+            return offsetDateTime.toInstant();
+        }
+        return null;
     }
 }

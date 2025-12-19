@@ -56,6 +56,14 @@ public class FeedbackController implements FeedbackApi {
     }
 
     @Override
+    public ResponseEntity<List<FeedbackResponseDto>> _listFeedbacks(String descricao, TipoUrgenciaEnumDto tipoUrgencia, Integer limit, Integer offset) {
+        FeedbackFilter filter = feedbackFilterMapper.toFilter(descricao, tipoUrgencia, limit, offset);
+        List<FeedbackDomain> domains = listFeedbackUseCase.findAll(filter);
+        List<FeedbackResponseDto> response = feedbackDtoMapper.toListFeedbackResponseDto(domains);
+        return ResponseEntity.ok(response);
+    }
+
+    @Override
     public ResponseEntity<Void> _createFeedback(FeedbackRequestDto feedbackRequestDto) {
         FeedbackDomain feedbackDomain = FeedbackPresenter.toFeedbackDomain(feedbackRequestDto);
         createFeedbackUseCase.create(feedbackDomain);
@@ -73,13 +81,5 @@ public class FeedbackController implements FeedbackApi {
     public ResponseEntity<Void> _deleteFeedback(String id) {
         deleteFeedbackUseCase.delete(id);
         return ResponseEntity.noContent().build();
-    }
-
-    @Override
-    public ResponseEntity<List<FeedbackResponseDto>> _listFeedbacks(String descricao, TipoUrgenciaEnumDto tipoUrgencia, Integer limit, Integer offset) {
-        FeedbackFilter filter = feedbackFilterMapper.toFilter(descricao, tipoUrgencia, limit, offset);
-        List<FeedbackDomain> domains = listFeedbackUseCase.findAll(filter);
-        List<FeedbackResponseDto> response = feedbackDtoMapper.toListFeedbackResponseDto(domains);
-        return ResponseEntity.ok(response);
     }
 }
