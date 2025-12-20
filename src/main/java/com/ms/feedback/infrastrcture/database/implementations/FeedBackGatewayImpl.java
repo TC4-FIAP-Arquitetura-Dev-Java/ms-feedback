@@ -1,13 +1,11 @@
 package com.ms.feedback.infrastrcture.database.implementations;
 
+import com.ms.feedback.application.dto.FeedbackFilter;
 import com.ms.feedback.application.gateway.FeedbackGateway;
 import com.ms.feedback.domain.model.FeedbackDomain;
-import com.ms.feedback.entrypoint.controllers.filter.FeedbackFilter;
 import com.ms.feedback.infrastrcture.database.entities.FeedbackDocument;
 import com.ms.feedback.infrastrcture.database.mappers.FeedbackDocumentMapper;
 import com.ms.feedback.infrastrcture.database.repositories.FeedbackRepository;
-import com.ms.loginDomain.gen.model.TipoUrgenciaEnumDto;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;

@@ -1,6 +1,6 @@
 package com.ms.feedback.entrypoint.controllers.mappers;
 
-import com.ms.feedback.entrypoint.controllers.filter.FeedbackFilter;
+import com.ms.feedback.application.dto.FeedbackFilter;
 import com.ms.loginDomain.gen.model.TipoUrgenciaEnumDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;

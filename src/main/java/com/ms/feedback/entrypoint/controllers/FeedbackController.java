@@ -1,8 +1,8 @@
 package com.ms.feedback.entrypoint.controllers;
 
+import com.ms.feedback.application.dto.FeedbackFilter;
 import com.ms.feedback.application.usecase.*;
 import com.ms.feedback.domain.model.FeedbackDomain;
-import com.ms.feedback.entrypoint.controllers.filter.FeedbackFilter;
 import com.ms.feedback.entrypoint.controllers.mappers.FeedbackDtoMapper;
 import com.ms.feedback.entrypoint.controllers.mappers.FeedbackFilterMapper;
 import com.ms.feedback.entrypoint.controllers.presenter.FeedbackPresenter;
