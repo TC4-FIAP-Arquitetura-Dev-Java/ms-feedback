@@ -7,6 +7,9 @@ import com.ms.feedback.infrastrcture.database.entities.FeedbackDocument;
 import com.ms.feedback.infrastrcture.database.mappers.FeedbackDocumentMapper;
 import com.ms.feedback.infrastrcture.database.repositories.FeedbackRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -29,17 +32,6 @@ public class FeedBackGatewayImpl implements FeedbackGateway {
     }
 
     @Override
-    public List<FeedbackDomain> findAll(FeedbackFilter filter) {
-        Query mongoQuery = buildQuery(filter);
-
-        return mongoTemplate
-                .find(mongoQuery, FeedbackDocument.class)
-                .stream()
-                .map(feedbackDocumentMapper::toDomain)
-                .toList();
-    }
-
-    @Override
     public void save(FeedbackDomain feedbackDomain) {
         FeedbackDocument feedbackDocument = feedbackDocumentMapper.toDocument(feedbackDomain);
         feedbackRepository.save(feedbackDocument);
@@ -51,36 +43,32 @@ public class FeedBackGatewayImpl implements FeedbackGateway {
         feedbackRepository.delete(document);
     }
 
+    @Override
+    public Page<FeedbackDomain> findAll(FeedbackFilter filter, Pageable pageable) {
+        Query mongoQuery = buildQuery(filter);
+        long total = mongoTemplate.count(mongoQuery, FeedbackDocument.class);
+        mongoQuery.with(pageable);
+
+        List<FeedbackDomain> feedbackDomains = mongoTemplate
+                .find(mongoQuery, FeedbackDocument.class)
+                .stream()
+                .map(feedbackDocumentMapper::toDomain)
+                .toList();
+
+        return new PageImpl<>(feedbackDomains, pageable, total);
+    }
+
     private Query buildQuery(FeedbackFilter filter) {
         Query query = new Query();
 
-        if(filter == null){
-            filter = new FeedbackFilter();
-        }
-
         // Filtro por Descrição
-        if (filter.getDescricao() != null && !filter.getDescricao().isBlank()) {
-            query.addCriteria(Criteria.where("descricao").regex(filter.getDescricao().trim(), "i"));
+        if (filter.descricao() != null && !filter.descricao().isBlank()) {
+            query.addCriteria(Criteria.where("descricao").regex(filter.descricao().trim(), "i"));
         }
 
         // Filtro por Tipo Urgência
-        if (filter.getTipoUrgencia() != null && filter.getTipoUrgencia().name() != null) {
-            query.addCriteria(Criteria.where("tipoUrgencia").is(filter.getTipoUrgencia().name()));
-        }
-
-        //Limit
-        if (filter.getLimit() != null && filter.getLimit() > 0) {
-            query.limit(filter.getLimit());
-        }
-
-        // Paginação
-        if (filter.getOffset() != null) {
-            int offset = filter.getOffset();
-
-            if (offset < 0) {
-                offset = 0;
-            }
-            query.skip(offset);
+        if (filter.tipoUrgencia() != null && filter.tipoUrgencia().name() != null) {
+            query.addCriteria(Criteria.where("tipoUrgencia").is(filter.tipoUrgencia().name()));
         }
         return query;
     }

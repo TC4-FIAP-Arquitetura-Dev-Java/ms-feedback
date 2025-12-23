@@ -77,9 +77,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/FeedbackResponse'
+                $ref: '#/components/schemas/PagedFeedbackResponse'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -213,6 +211,24 @@ components:
         - ALTA
         - URGENTE
       example: MEDIA
+
+    PagedFeedbackResponse:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/FeedbackResponse'
+        totalElements:
+          type: integer
+          format: int64
+          example: 120
+        limit:
+          type: integer
+          example: 10
+        offset:
+          type: integer
+          example: 0
 
     ApiError:
       type: object

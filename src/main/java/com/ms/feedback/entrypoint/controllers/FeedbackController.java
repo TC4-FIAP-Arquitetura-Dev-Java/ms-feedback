@@ -2,6 +2,7 @@ package com.ms.feedback.entrypoint.controllers;
 
 import com.ms.feedback.application.dto.FeedbackFilter;
 import com.ms.feedback.application.usecase.*;
+import com.ms.feedback.domain.enuns.TipoUrgenciaEnum;
 import com.ms.feedback.domain.model.FeedbackDomain;
 import com.ms.feedback.entrypoint.controllers.mappers.FeedbackDtoMapper;
 import com.ms.feedback.entrypoint.controllers.mappers.FeedbackFilterMapper;
@@ -9,8 +10,12 @@ import com.ms.feedback.entrypoint.controllers.presenter.FeedbackPresenter;
 import com.ms.loginDomain.FeedbackApi;
 import com.ms.loginDomain.gen.model.FeedbackRequestDto;
 import com.ms.loginDomain.gen.model.FeedbackResponseDto;
+import com.ms.loginDomain.gen.model.PagedFeedbackResponseDto;
 import com.ms.loginDomain.gen.model.TipoUrgenciaEnumDto;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -56,12 +61,36 @@ public class FeedbackController implements FeedbackApi {
     }
 
     @Override
-    public ResponseEntity<List<FeedbackResponseDto>> _listFeedbacks(String descricao, TipoUrgenciaEnumDto tipoUrgencia, Integer limit, Integer offset) {
-        FeedbackFilter filter = feedbackFilterMapper.toFilter(descricao, tipoUrgencia, limit, offset);
-        List<FeedbackDomain> domains = listFeedbackUseCase.findAll(filter);
-        List<FeedbackResponseDto> response = feedbackDtoMapper.toListFeedbackResponseDto(domains);
+    public ResponseEntity<PagedFeedbackResponseDto> _listFeedbacks(String descricao, TipoUrgenciaEnumDto tipoUrgencia, Integer limit, Integer offset) {
+
+        int safeLimit = (limit == null || limit <= 0) ? 10 : limit;
+        int safeOffset = (offset == null || offset <= 0) ? 0 : offset;
+
+        int page = safeOffset / safeLimit;
+
+        Pageable pageable = PageRequest.of(page, safeLimit);
+        TipoUrgenciaEnum tipo = feedbackDtoMapper.toTipoUrgenciaEnum(tipoUrgencia);
+        FeedbackFilter filter = new FeedbackFilter(descricao, tipo);
+
+        Page<FeedbackDomain> domainPage = listFeedbackUseCase.findAll(filter, pageable);
+        List<FeedbackResponseDto> content = feedbackDtoMapper.toListFeedbackResponseDto(domainPage.getContent());
+
+        PagedFeedbackResponseDto response = new PagedFeedbackResponseDto();
+        response.setContent(content);
+        response.setLimit(safeLimit);
+        response.setOffset(safeOffset);
+        response.setTotalElements(domainPage.getTotalElements());
+
         return ResponseEntity.ok(response);
     }
+
+    //    @Override
+//    public ResponseEntity<List<FeedbackResponseDto>> _listFeedbacks(String descricao, TipoUrgenciaEnumDto tipoUrgencia, Integer limit, Integer offset) {
+//        FeedbackFilter filter = feedbackFilterMapper.toFilter(descricao, tipoUrgencia, limit, offset);
+//        List<FeedbackDomain> domains = listFeedbackUseCase.findAll(filter);
+//        List<FeedbackResponseDto> response = feedbackDtoMapper.toListFeedbackResponseDto(domains);
+//        return ResponseEntity.ok(response);
+//    }
 
     @Override
     public ResponseEntity<Void> _createFeedback(FeedbackRequestDto feedbackRequestDto) {
