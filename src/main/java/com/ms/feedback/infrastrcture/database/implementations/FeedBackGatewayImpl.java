@@ -62,13 +62,13 @@ public class FeedBackGatewayImpl implements FeedbackGateway {
         Query query = new Query();
 
         // Filtro por Descrição
-        if (filter.descricao() != null && !filter.descricao().isBlank()) {
-            query.addCriteria(Criteria.where("descricao").regex(filter.descricao().trim(), "i"));
+        if (filter.description() != null && !filter.description().isBlank()) {
+            query.addCriteria(Criteria.where("descricao").regex(filter.description().trim(), "i"));
         }
 
         // Filtro por Tipo Urgência
-        if (filter.tipoUrgencia() != null && filter.tipoUrgencia().name() != null) {
-            query.addCriteria(Criteria.where("tipoUrgencia").is(filter.tipoUrgencia().name()));
+        if (filter.urgencyType() != null && filter.urgencyType().name() != null) {
+            query.addCriteria(Criteria.where("tipoUrgencia").is(filter.urgencyType().name()));
         }
         return query;
     }

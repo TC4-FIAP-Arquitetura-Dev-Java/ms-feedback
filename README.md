@@ -50,7 +50,7 @@ curl -X POST http://localhost:9085/feedback \
   -d '{
     "descricao": "Excelente atendimento e rapidez!",
     "nota": 9,
-    "tipoUrgenciaEnum": "MEDIA"
+    "urgencyTypeEnum": "MEDIA"
   }'
 ```
 
@@ -79,7 +79,7 @@ curl -X GET "http://localhost:9085/feedback?tipoUrgencia=ALTA&limit=5"
     "id": "652ff3a9b1c2d40012ab45de",
     "descricao": "Excelente atendimento",
     "nota": 8,
-    "tipoUrgenciaEnum": "MEDIA",
+    "urgencyTypeEnum": "MEDIA",
     "dataEnvio": "2025-10-22T20:30:00Z"
   }
 ]
@@ -110,7 +110,7 @@ curl -X PUT http://localhost:9085/feedback/652ff3a9b1c2d40012ab45de \
   -d '{
     "descricao": "Texto atualizado",
     "nota": 10,
-    "tipoUrgenciaEnum": "URGENTE"
+    "urgencyTypeEnum": "URGENTE"
   }'
 ```
 
@@ -130,7 +130,7 @@ curl -X DELETE http://localhost:9085/feedback/652ff3a9b1c2d40012ab45de
 
 ## 📋 Regras de Negócio e Enums
 
-### 🚨 Níveis de Urgência (`tipoUrgenciaEnum`)
+### 🚨 Níveis de Urgência (`urgencyTypeEnum`)
 
 * `BAIXA`
 * `MEDIA`

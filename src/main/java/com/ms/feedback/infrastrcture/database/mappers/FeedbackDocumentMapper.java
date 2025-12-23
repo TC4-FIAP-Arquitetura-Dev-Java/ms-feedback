@@ -13,10 +13,10 @@ import java.time.ZoneOffset;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.ERROR)
 public interface FeedbackDocumentMapper {
 
-    @Mapping(target = "dataEnvio", expression = "java(toOffsetDateTime(document.getDataEnvio()))")
+    @Mapping(target = "sentDate", expression = "java(toOffsetDateTime(document.getSentDate()))")
     FeedbackDomain toDomain(FeedbackDocument document);
 
-    @Mapping(target = "dataEnvio", expression = "java(toInstant(domain.getDataEnvio()))")
+    @Mapping(target = "sentDate", expression = "java(toInstant(domain.getSentDate()))")
     FeedbackDocument toDocument(FeedbackDomain domain);
 
     default OffsetDateTime toOffsetDateTime(Instant instant) {

@@ -20,9 +20,9 @@ public class UpdateFeedbackUseCaseImpl implements UpdateFeedbackUseCase {
         FeedbackDomain domain = feedbackGateway.findById(id).orElse(null);
 
         if(domain != null) {
-            domain.setDescricao(feedback.getDescricao());
-            domain.setNota(feedback.getNota());
-            domain.setTipoUrgenciaEnum(feedback.getTipoUrgenciaEnum());
+            domain.setDescription(feedback.getDescription());
+            domain.setRating(feedback.getRating());
+            domain.setUrgencyType(feedback.getUrgencyType());
             feedbackGateway.save(domain);
         }else{
             throw new FeedbackNotFoundException("Feedback not found!");

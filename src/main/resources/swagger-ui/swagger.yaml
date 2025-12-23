@@ -1,19 +1,19 @@
 openapi: 3.0.3
 
 info:
-  title: API de Gerenciamento de Feedbacks
+  title: Feedback API
   version: 1.0.0
-  description: API para criação, consulta, atualização e remoção de feedbacks.
+  description: API for creating, retrieving, updating, and deleting feedback records.
 
 tags:
   - name: Feedback
-    description: Operações relacionadas ao gerenciamento de feedbacks.
+    description: Operations related to feedback management.
 
 paths:
   /feedback:
     post:
-      summary: Registrar um novo feedback
-      description: Cria um novo registro de feedback.
+      summary: Create a new feedback
+      description: Creates a new feedback record.
       operationId: createFeedback
       tags:
         - Feedback
@@ -25,7 +25,7 @@ paths:
               $ref: '#/components/schemas/FeedbackRequest'
       responses:
         '201':
-          description: Feedback registrado com sucesso.
+          description: Feedback successfully created.
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -38,42 +38,44 @@ paths:
     get:
       tags:
         - Feedback
-      summary: Listar feedbacks
+      summary: List feedbacks
+      description: Retrieves a paginated list of feedbacks.
       operationId: listFeedbacks
-
       parameters:
-        - name: descricao
+        - name: description
           in: query
           required: false
-          description: Texto do feedback.
+          description: Feedback text.
           schema:
             type: string
-            example: Excelente atendimento
+            example: Excellent service
 
-        - name: tipoUrgencia
+        - name: urgencyType
           in: query
           required: false
-          description: Nível de urgência do feedback.
+          description: Feedback urgency level.
           schema:
-            $ref: '#/components/schemas/TipoUrgenciaEnum'
+            $ref: '#/components/schemas/UrgencyTypeEnum'
 
         - name: limit
           in: query
           required: false
-          description: Limite máxima de registros por página.
+          description: Maximum number of records per page.
           schema:
             type: integer
+            example: 10
 
         - name: offset
           in: query
           required: false
-          description: Paginação
+          description: Pagination offset.
           schema:
             type: integer
+            example: 0
 
       responses:
         '200':
-          description: Lista de feedbacks encontrados.
+          description: List of feedbacks found.
           content:
             application/json:
               schema:
@@ -93,13 +95,14 @@ paths:
     get:
       tags:
         - Feedback
-      summary: Buscar feedback por ID
+      summary: Get feedback by ID
+      description: Retrieves a feedback record by its unique identifier.
       operationId: getFeedbackById
       parameters:
         - $ref: '#/components/parameters/PathId'
       responses:
         '200':
-          description: Feedback encontrado.
+          description: Feedback found.
           content:
             application/json:
               schema:
@@ -118,7 +121,8 @@ paths:
     put:
       tags:
         - Feedback
-      summary: Atualizar um feedback
+      summary: Update feedback
+      description: Updates an existing feedback record.
       operationId: updateFeedback
       parameters:
         - $ref: '#/components/parameters/PathId'
@@ -130,7 +134,7 @@ paths:
               $ref: '#/components/schemas/FeedbackRequest'
       responses:
         '204':
-          description: Usuário atualizado com sucesso.
+          description: Feedback successfully updated.
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -145,13 +149,14 @@ paths:
     delete:
       tags:
         - Feedback
-      summary: Deletar feedback por ID
+      summary: Delete feedback by ID
+      description: Deletes a feedback record by its ID.
       operationId: deleteFeedback
       parameters:
         - $ref: '#/components/parameters/PathId'
       responses:
         '204':
-          description: Usuário atualizado com sucesso.
+          description: Feedback successfully deleted.
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -168,20 +173,20 @@ components:
     FeedbackRequest:
       type: object
       required:
-        - descricao
-        - nota
-        - tipoUrgenciaEnum
+        - description
+        - rating
+        - urgencyType
       properties:
-        descricao:
+        description:
           type: string
-          description: Texto do feedback.
-          example: Excelente atendimento.
-        nota:
+          description: Feedback text.
+          example: Excellent service.
+        rating:
           type: number
-          description: Nota atribuída ao feedback (0 a 10).
+          description: Rating assigned to the feedback (0 to 10).
           example: 8
-        tipoUrgenciaEnum:
-          $ref: '#/components/schemas/TipoUrgenciaEnum'
+        urgencyType:
+          $ref: '#/components/schemas/UrgencyTypeEnum'
 
     FeedbackResponse:
       type: object
@@ -189,28 +194,28 @@ components:
         id:
           type: string
           example: 652ff3a9b1c2d40012ab45de
-        descricao:
+        description:
           type: string
-          example: Excelente atendimento.
-        nota:
+          example: Excellent service.
+        rating:
           type: number
           example: 8
-        tipoUrgenciaEnum:
-          $ref: '#/components/schemas/TipoUrgenciaEnum'
-        dataEnvio:
+        urgencyType:
+          $ref: '#/components/schemas/UrgencyTypeEnum'
+        sentDate:
           type: string
           format: date-time
           example: 2025-10-22T20:30:00Z
 
-    TipoUrgenciaEnum:
+    UrgencyTypeEnum:
       type: string
-      description: Nível de urgência associado ao feedback.
+      description: Urgency level associated with the feedback.
       enum:
-        - BAIXA
-        - MEDIA
-        - ALTA
-        - URGENTE
-      example: MEDIA
+        - LOW
+        - MEDIUM
+        - HIGH
+        - URGENT
+      example: MEDIUM
 
     PagedFeedbackResponse:
       type: object
@@ -241,7 +246,7 @@ components:
           example: Bad Request
         message:
           type: string
-          example: Parâmetros inválidos.
+          example: Invalid parameters.
         path:
           type: string
           example: /feedback
@@ -257,40 +262,39 @@ components:
       required: true
       schema:
         type: string
-      description: ID do usuário (obrigatório para update e delete).
-
+      description: Feedback ID (required for update and delete operations).
 
   responses:
     BadRequest:
-      description: Requisição inválida.
+      description: Invalid request.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ApiError'
 
     Unauthorized:
-      description: Falha de autenticação.
+      description: Authentication failure.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ApiError'
 
     Forbidden:
-      description: Acesso negado.
+      description: Access denied.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ApiError'
 
     NotFound:
-      description: Recurso não encontrado.
+      description: Resource not found.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ApiError'
 
     InternalError:
-      description: Erro interno do servidor.
+      description: Internal server error.
       content:
         application/json:
           schema:

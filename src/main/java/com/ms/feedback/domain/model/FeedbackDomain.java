@@ -1,16 +1,16 @@
 package com.ms.feedback.domain.model;
 
-import com.ms.feedback.domain.enuns.TipoUrgenciaEnum;
+import com.ms.feedback.domain.enuns.UrgencyTypeEnum;
 
 import java.time.OffsetDateTime;
 
 public class FeedbackDomain {
 
     private String id;
-    private String descricao;
-    private Integer nota;
-    private TipoUrgenciaEnum tipoUrgenciaEnum;
-    private OffsetDateTime dataEnvio;
+    private String description;
+    private Integer rating;
+    private UrgencyTypeEnum urgencyType;
+    private OffsetDateTime sentDate;
 
     public String getId() {
         return id;
@@ -20,35 +20,35 @@ public class FeedbackDomain {
         this.id = id;
     }
 
-    public String getDescricao() {
-        return descricao;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public Integer getNota() {
-        return nota;
+    public Integer getRating() {
+        return rating;
     }
 
-    public void setNota(Integer nota) {
-        this.nota = nota;
+    public void setRating(Integer rating) {
+        this.rating = rating;
     }
 
-    public TipoUrgenciaEnum getTipoUrgenciaEnum() {
-        return tipoUrgenciaEnum;
+    public UrgencyTypeEnum getUrgencyType() {
+        return urgencyType;
     }
 
-    public void setTipoUrgenciaEnum(TipoUrgenciaEnum tipoUrgenciaEnum) {
-        this.tipoUrgenciaEnum = tipoUrgenciaEnum;
+    public void setUrgencyType(UrgencyTypeEnum urgencyType) {
+        this.urgencyType = urgencyType;
     }
 
-    public OffsetDateTime getDataEnvio() {
-        return dataEnvio;
+    public OffsetDateTime getSentDate() {
+        return sentDate;
     }
 
-    public void setDataEnvio(OffsetDateTime dataEnvio) {
-        this.dataEnvio = dataEnvio;
+    public void setSentDate(OffsetDateTime sentDate) {
+        this.sentDate = sentDate;
     }
 }

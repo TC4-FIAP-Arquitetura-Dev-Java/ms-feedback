@@ -1,6 +1,6 @@
 package com.ms.feedback.infrastrcture.database.entities;
 
-import com.ms.feedback.domain.enuns.TipoUrgenciaEnum;
+import com.ms.feedback.domain.enuns.UrgencyTypeEnum;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
@@ -16,13 +16,13 @@ public class FeedbackDocument {
     @Id
     private String id;
 
-    private String descricao;
+    private String description;
 
-    private Integer nota;
+    private Integer rating;
 
-    @Field("tipoUrgencia")
-    private TipoUrgenciaEnum tipoUrgenciaEnum;
+    @Field("urgencyType")
+    private UrgencyTypeEnum urgencyType;
 
     @CreatedDate
-    private Instant dataEnvio;
+    private Instant sentDate;
 }
