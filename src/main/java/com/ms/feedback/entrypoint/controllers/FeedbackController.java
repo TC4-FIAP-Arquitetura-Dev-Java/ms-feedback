@@ -7,6 +7,7 @@ import com.ms.feedback.domain.model.FeedbackDomain;
 import com.ms.feedback.entrypoint.controllers.mappers.FeedbackDtoMapper;
 import com.ms.feedback.entrypoint.controllers.mappers.FeedbackFilterMapper;
 import com.ms.feedback.entrypoint.controllers.presenter.FeedbackPresenter;
+import com.ms.feedback.infrastrcture.config.security.SecurityUtil;
 import com.ms.loginDomain.FeedbackApi;
 import com.ms.loginDomain.gen.model.FeedbackRequestDto;
 import com.ms.loginDomain.gen.model.FeedbackResponseDto;
@@ -34,23 +35,23 @@ public class FeedbackController implements FeedbackApi {
     private final DeleteFeedbackUseCase deleteFeedbackUseCase;
     private final UpdateFeedbackUseCase updateFeedbackUseCase;
 
-    private final FeedbackFilterMapper feedbackFilterMapper;
     private final FeedbackDtoMapper feedbackDtoMapper;
+    private final SecurityUtil securityUtil;
 
     public FeedbackController(GetFeedbackByIdUseCase getFeedbackByIdUseCase,
                               ListFeedbackUseCase listFeedbackUseCase,
                               CreateFeedbackUseCase createFeedbackUseCase,
                               DeleteFeedbackUseCase deleteFeedbackUseCase,
                               UpdateFeedbackUseCase updateFeedbackUseCase,
-                              FeedbackFilterMapper feedbackFilterMapper,
-                              FeedbackDtoMapper  feedbackDtoMapper) {
+                              FeedbackDtoMapper feedbackDtoMapper,
+                              SecurityUtil securityUtil) {
         this.getFeedbackByIdUseCase = getFeedbackByIdUseCase;
         this.listFeedbackUseCase = listFeedbackUseCase;
         this.createFeedbackUseCase = createFeedbackUseCase;
         this.deleteFeedbackUseCase = deleteFeedbackUseCase;
         this.updateFeedbackUseCase = updateFeedbackUseCase;
-        this.feedbackFilterMapper = feedbackFilterMapper;
         this.feedbackDtoMapper = feedbackDtoMapper;
+        this.securityUtil = securityUtil;
     }
 
     @Override
