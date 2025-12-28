@@ -7,5 +7,5 @@ RUN mvn clean install -DSkipsTests
 FROM alpine/java:21-jre
 WORKDIR /app
 COPY --from=builder /app/target/*.jar app.jar
-EXPOSE 9085
+EXPOSE 9084
 CMD ["java", "-jar", "app.jar"]
