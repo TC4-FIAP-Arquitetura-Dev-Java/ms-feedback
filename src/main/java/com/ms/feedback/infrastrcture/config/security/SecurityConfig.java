@@ -37,6 +37,7 @@ public class SecurityConfig {
                         .frameOptions(frameOptions -> frameOptions.sameOrigin()))
                 .authorizeHttpRequests(
                         auth -> auth.requestMatchers(
+                                        "/ping",
                                         "/users/**",
                                         "/users",
                                         "/login",
