@@ -38,6 +38,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(
                         auth -> auth.requestMatchers(
                                         "/ping",
+                                        "/v1/ping",
                                         "/users/**",
                                         "/users",
                                         "/login",
