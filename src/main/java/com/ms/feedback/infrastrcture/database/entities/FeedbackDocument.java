@@ -1,28 +1,33 @@
 package com.ms.feedback.infrastrcture.database.entities;
 
 import com.ms.feedback.domain.enuns.UrgencyTypeEnum;
+import jakarta.persistence.*;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.Field;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.Instant;
 
 @Data
-@Document(collection = "feedback")
+@Entity
+@Table(name = "feedback")
+@EntityListeners(AuditingEntityListener.class)
 public class FeedbackDocument {
 
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
+    @Column(length = 1000)
     private String description;
 
     private Integer rating;
 
-    @Field("urgencyType")
+    @Column(name = "urgency_type")
+    @Enumerated(EnumType.STRING)
     private UrgencyTypeEnum urgencyType;
 
     @CreatedDate
+    @Column(name = "sent_date")
     private Instant sentDate;
 }

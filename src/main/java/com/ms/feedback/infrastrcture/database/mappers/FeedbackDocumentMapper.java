@@ -13,9 +13,11 @@ import java.time.ZoneOffset;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.ERROR)
 public interface FeedbackDocumentMapper {
 
+    @Mapping(target = "id", expression = "java(document.getId() != null ? String.valueOf(document.getId()) : null)")
     @Mapping(target = "sentDate", expression = "java(toOffsetDateTime(document.getSentDate()))")
     FeedbackDomain toDomain(FeedbackDocument document);
 
+    @Mapping(target = "id", expression = "java(toLongId(domain.getId()))")
     @Mapping(target = "sentDate", expression = "java(toInstant(domain.getSentDate()))")
     FeedbackDocument toDocument(FeedbackDomain domain);
 
@@ -29,6 +31,17 @@ public interface FeedbackDocumentMapper {
     default Instant toInstant(OffsetDateTime offsetDateTime) {
         if(offsetDateTime != null) {
             return offsetDateTime.toInstant();
+        }
+        return null;
+    }
+
+    default Long toLongId(String id) {
+        if(id != null && !id.isEmpty()) {
+            try {
+                return Long.parseLong(id);
+            } catch (NumberFormatException e) {
+                return null;
+            }
         }
         return null;
     }

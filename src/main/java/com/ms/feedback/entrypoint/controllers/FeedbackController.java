@@ -5,7 +5,6 @@ import com.ms.feedback.application.usecase.*;
 import com.ms.feedback.domain.enuns.UrgencyTypeEnum;
 import com.ms.feedback.domain.model.FeedbackDomain;
 import com.ms.feedback.entrypoint.controllers.mappers.FeedbackDtoMapper;
-import com.ms.feedback.entrypoint.controllers.mappers.FeedbackFilterMapper;
 import com.ms.feedback.entrypoint.controllers.presenter.FeedbackPresenter;
 import com.ms.feedback.infrastrcture.config.security.SecurityUtil;
 import com.ms.loginDomain.FeedbackApi;
@@ -103,5 +102,10 @@ public class FeedbackController implements FeedbackApi {
     public ResponseEntity<Void> _deleteFeedback(String id) {
         deleteFeedbackUseCase.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @org.springframework.web.bind.annotation.GetMapping("/ping")
+    public ResponseEntity<String> ping() {
+        return ResponseEntity.ok("pong");
     }
 }
