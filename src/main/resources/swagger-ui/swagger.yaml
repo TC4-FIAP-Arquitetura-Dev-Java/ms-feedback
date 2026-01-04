@@ -91,6 +91,37 @@ paths:
         '500':
           $ref: '#/components/responses/InternalError'
 
+  /feedback/report:
+    post:
+      tags:
+        - Feedback
+      summary: Get weekly feedback report
+      description: Retrieves a consolidated weekly report with averages, daily counts, and urgency metrics.
+      operationId: report
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DateRequest'
+      responses:
+        '200':
+          description: Feedback report successfully generated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FeedbackReportResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
   /feedback/{id}:
     get:
       tags:
@@ -203,6 +234,57 @@ components:
         urgencyType:
           $ref: '#/components/schemas/UrgencyTypeEnum'
         sentDate:
+          type: string
+          format: date-time
+          example: 2025-10-22T20:30:00Z
+
+    FeedbackReportResponse:
+      type: object
+      properties:
+        evaluationsPerDay:
+          type: array
+          description: Quantidade de avaliações agrupadas por dia
+          items:
+            $ref: '#/components/schemas/EvaluationByDay'
+        evaluationsPerUrgency:
+          type: array
+          description: Quantidade de avaliações agrupadas por tipo de urgência
+          items:
+            $ref: '#/components/schemas/EvaluationByUrgency'
+
+    EvaluationByDay:
+      type: object
+      properties:
+        day:
+          type: string
+          format: date
+          example: 2024-11-02
+        quantity:
+          type: integer
+          format: int64
+          example: 5
+
+    EvaluationByUrgency:
+      type: object
+      properties:
+        urgency:
+          type: string
+          description: Tipo de urgência do feedback
+          enum:
+            - LOW
+            - MEDIUM
+            - HIGH
+            - URGENT
+          example: LOW
+        quantity:
+          type: integer
+          format: int64
+          example: 7
+
+    DateRequest:
+      type: object
+      properties:
+        date:
           type: string
           format: date-time
           example: 2025-10-22T20:30:00Z
