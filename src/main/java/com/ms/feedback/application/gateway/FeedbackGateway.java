@@ -2,6 +2,7 @@ package com.ms.feedback.application.gateway;
 
 import com.ms.feedback.application.dto.FeedbackFilter;
 import com.ms.feedback.domain.model.FeedbackDomain;
+import com.ms.feedback.domain.model.FeedbackReportDomain;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
