@@ -1,13 +1,18 @@
 package com.ms.feedback.entrypoint.controllers;
 
 import com.ms.feedback.application.dto.FeedbackFilter;
-import com.ms.feedback.application.usecase.*;
+import com.ms.feedback.application.usecase.CreateFeedbackUseCase;
+import com.ms.feedback.application.usecase.DeleteFeedbackUseCase;
+import com.ms.feedback.application.usecase.GetFeedbackByIdUseCase;
+import com.ms.feedback.application.usecase.GetFeedbackReportUseCase;
+import com.ms.feedback.application.usecase.ListFeedbackUseCase;
+import com.ms.feedback.application.usecase.UpdateFeedbackUseCase;
 import com.ms.feedback.domain.enuns.UrgencyTypeEnum;
 import com.ms.feedback.domain.model.FeedbackDomain;
 import com.ms.feedback.domain.model.FeedbackReportDomain;
 import com.ms.feedback.entrypoint.controllers.mappers.FeedbackDtoMapper;
 import com.ms.feedback.entrypoint.controllers.presenter.FeedbackPresenter;
-import com.ms.feedback.infrastrcture.config.security.SecurityUtil;
+import com.ms.feedback.infrastructure.config.security.SecurityUtil;
 import com.ms.loginDomain.FeedbackApi;
 import com.ms.loginDomain.gen.model.DateRequestDto;
 import com.ms.loginDomain.gen.model.FeedbackReportResponseDto;
@@ -24,7 +29,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.OffsetDateTime;
 import java.util.List;
 
 @Slf4j
@@ -40,7 +44,6 @@ public class FeedbackController implements FeedbackApi {
     private final GetFeedbackReportUseCase getFeedbackReportUseCase;
 
     private final FeedbackDtoMapper feedbackDtoMapper;
-    private final SecurityUtil securityUtil;
 
     public FeedbackController(GetFeedbackByIdUseCase getFeedbackByIdUseCase,
                               ListFeedbackUseCase listFeedbackUseCase,
@@ -56,7 +59,6 @@ public class FeedbackController implements FeedbackApi {
         this.deleteFeedbackUseCase = deleteFeedbackUseCase;
         this.updateFeedbackUseCase = updateFeedbackUseCase;
         this.feedbackDtoMapper = feedbackDtoMapper;
-        this.securityUtil = securityUtil;
         this.getFeedbackReportUseCase = getFeedbackReportUseCase;
     }
 
