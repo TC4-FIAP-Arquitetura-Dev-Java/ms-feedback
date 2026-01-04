@@ -1,6 +1,5 @@
 package com.ms.feedback.domain.model;
 
-import java.sql.Date;
 import java.time.LocalDate;
 
 public class ReportByDayDomain {
@@ -9,16 +8,6 @@ public class ReportByDayDomain {
     private LocalDate date;
 
     public ReportByDayDomain() {}
-
-    public ReportByDayDomain(Date date, Long quantity) {
-        this.date = date.toLocalDate();
-        this.quantity = quantity;
-    }
-
-    public ReportByDayDomain(LocalDate date, Long quantity) {
-        this.date = date;
-        this.quantity = quantity;
-    }
 
     public Long getQuantity() {
         return quantity;

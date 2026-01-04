@@ -5,6 +5,7 @@ import com.ms.feedback.infrastructure.database.entities.FeedbackDocument;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
+import org.mapstruct.factory.Mappers;
 
 import java.time.Instant;
 import java.time.OffsetDateTime;
@@ -12,6 +13,8 @@ import java.time.ZoneOffset;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.ERROR)
 public interface FeedbackDocumentMapper {
+
+    FeedbackDocumentMapper INSTANCE = Mappers.getMapper(FeedbackDocumentMapper.class);
 
     @Mapping(target = "id", expression = "java(document.getId() != null ? String.valueOf(document.getId()) : null)")
     @Mapping(target = "sentDate", expression = "java(toOffsetDateTime(document.getSentDate()))")

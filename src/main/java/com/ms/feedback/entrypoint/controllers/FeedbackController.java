@@ -10,9 +10,7 @@ import com.ms.feedback.application.usecase.UpdateFeedbackUseCase;
 import com.ms.feedback.domain.enuns.UrgencyTypeEnum;
 import com.ms.feedback.domain.model.FeedbackDomain;
 import com.ms.feedback.domain.model.FeedbackReportDomain;
-import com.ms.feedback.entrypoint.controllers.mappers.FeedbackDtoMapper;
 import com.ms.feedback.entrypoint.controllers.presenter.FeedbackPresenter;
-import com.ms.feedback.infrastructure.config.security.SecurityUtil;
 import com.ms.loginDomain.FeedbackApi;
 import com.ms.loginDomain.gen.model.DateRequestDto;
 import com.ms.loginDomain.gen.model.FeedbackReportResponseDto;
@@ -43,29 +41,24 @@ public class FeedbackController implements FeedbackApi {
     private final UpdateFeedbackUseCase updateFeedbackUseCase;
     private final GetFeedbackReportUseCase getFeedbackReportUseCase;
 
-    private final FeedbackDtoMapper feedbackDtoMapper;
-
     public FeedbackController(GetFeedbackByIdUseCase getFeedbackByIdUseCase,
                               ListFeedbackUseCase listFeedbackUseCase,
                               CreateFeedbackUseCase createFeedbackUseCase,
                               DeleteFeedbackUseCase deleteFeedbackUseCase,
                               UpdateFeedbackUseCase updateFeedbackUseCase,
-                              FeedbackDtoMapper feedbackDtoMapper,
-                              SecurityUtil securityUtil,
                               GetFeedbackReportUseCase getFeedbackReportUseCase) {
         this.getFeedbackByIdUseCase = getFeedbackByIdUseCase;
         this.listFeedbackUseCase = listFeedbackUseCase;
         this.createFeedbackUseCase = createFeedbackUseCase;
         this.deleteFeedbackUseCase = deleteFeedbackUseCase;
         this.updateFeedbackUseCase = updateFeedbackUseCase;
-        this.feedbackDtoMapper = feedbackDtoMapper;
         this.getFeedbackReportUseCase = getFeedbackReportUseCase;
     }
 
     @Override
     public ResponseEntity<FeedbackResponseDto> _getFeedbackById(String id) {
         FeedbackDomain feedbackDomain = getFeedbackByIdUseCase.getById(id);
-        FeedbackResponseDto responseDto = FeedbackDtoMapper.INSTANCE.toFeedbackResponseDto(feedbackDomain);
+        FeedbackResponseDto responseDto = FeedbackPresenter.toFeedbackResponseDto(feedbackDomain);
         return ResponseEntity.ok(responseDto);
     }
 
@@ -78,11 +71,11 @@ public class FeedbackController implements FeedbackApi {
         int page = safeOffset / safeLimit;
 
         Pageable pageable = PageRequest.of(page, safeLimit);
-        UrgencyTypeEnum type = feedbackDtoMapper.toUrgencyTypeEnum(urgencyType);
+        UrgencyTypeEnum type = FeedbackPresenter.toUrgencyTypeEnum(urgencyType);
         FeedbackFilter filter = new FeedbackFilter(description, type);
 
         Page<FeedbackDomain> domainPage = listFeedbackUseCase.findAll(filter, pageable);
-        List<FeedbackResponseDto> content = feedbackDtoMapper.toListFeedbackResponseDto(domainPage.getContent());
+        List<FeedbackResponseDto> content = FeedbackPresenter.toListFeedbackResponseDto(domainPage.getContent());
 
         PagedFeedbackResponseDto response = new PagedFeedbackResponseDto();
         response.setContent(content);
@@ -116,7 +109,7 @@ public class FeedbackController implements FeedbackApi {
     @Override
     public ResponseEntity<FeedbackReportResponseDto> _report(DateRequestDto dateRequestDto) {
         FeedbackReportDomain feedbackDomain = getFeedbackReportUseCase.getFeedbackReportWeek(dateRequestDto.getDate());
-        FeedbackReportResponseDto responseDto = FeedbackDtoMapper.INSTANCE.toFeedbackReportResponseDto(feedbackDomain);
+        FeedbackReportResponseDto responseDto = FeedbackPresenter.toFeedbackReportResponseDto(feedbackDomain);
         return ResponseEntity.ok(responseDto);
     }
 

@@ -9,11 +9,6 @@ public class EvaluationByUrgencyDomain {
 
     public EvaluationByUrgencyDomain() {}
 
-    public EvaluationByUrgencyDomain(UrgencyTypeEnum urgencyTypeEnum, Long quantity) {
-        this.urgencyTypeEnum = urgencyTypeEnum;
-        this.quantity = quantity;
-    }
-
     public UrgencyTypeEnum getUrgencyTypeEnum() {
         return urgencyTypeEnum;
     }
