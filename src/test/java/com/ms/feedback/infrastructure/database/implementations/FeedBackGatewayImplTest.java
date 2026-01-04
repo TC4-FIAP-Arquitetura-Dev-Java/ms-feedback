@@ -1,5 +1,6 @@
 package com.ms.feedback.infrastructure.database.implementations;
 
+import com.ms.feedback.application.dto.FeedbackFilter;
 import com.ms.feedback.domain.model.FeedbackDomain;
 import com.ms.feedback.infrastructure.database.entities.FeedbackDocument;
 import com.ms.feedback.infrastructure.database.mappers.FeedbackDocumentMapper;
@@ -9,11 +10,15 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
@@ -102,5 +107,20 @@ class FeedBackGatewayImplTest {
         gateway.delete(domain);
 
         verify(feedbackRepository).delete(document);
+    }
+
+    @Test
+    void findAll_shouldWorkWithoutFilters() {
+        Page<FeedbackDocument> page = Page.empty();
+
+        when(feedbackRepository.findAll(any(Specification.class), any(PageRequest.class)))
+                .thenReturn(page);
+
+        FeedbackFilter filter = new FeedbackFilter(null, null);
+
+        Page<FeedbackDomain> result =
+                gateway.findAll(filter, PageRequest.of(0, 10));
+
+        assertEquals(0, result.getTotalElements());
     }
 }

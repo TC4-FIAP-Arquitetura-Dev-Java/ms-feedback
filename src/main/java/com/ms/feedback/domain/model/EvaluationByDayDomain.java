@@ -9,11 +9,6 @@ public class EvaluationByDayDomain {
 
     public EvaluationByDayDomain() {}
 
-    public EvaluationByDayDomain(LocalDate day, Long quantity) {
-        this.day = day;
-        this.quantity = quantity;
-    }
-
     public LocalDate getDay() {
         return day;
     }
