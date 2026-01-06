@@ -11,6 +11,7 @@ public class FeedbackDomain {
     private Integer rating;
     private UrgencyTypeEnum urgencyType;
     private OffsetDateTime sentDate;
+    private String email;
 
     public String getId() {
         return id;
@@ -50,5 +51,13 @@ public class FeedbackDomain {
 
     public void setSentDate(OffsetDateTime sentDate) {
         this.sentDate = sentDate;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

@@ -118,6 +118,12 @@
             <scope>runtime</scope>
         </dependency>
 
+        <dependency>
+            <groupId>io.github.openfeign</groupId>
+            <artifactId>feign-jackson</artifactId>
+            <version>12.1</version>
+        </dependency>
+
         <!--Test-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -287,6 +293,7 @@
                                 <exclude>**/gen/**</exclude>
                                 <exclude>**/dto/**</exclude>
                                 <exclude>**/mapper/**</exclude>
+                                <exclude>**/infrastructure/integration/configuration/**</exclude>
                             </excludes>
                         </configuration>
                     </execution>

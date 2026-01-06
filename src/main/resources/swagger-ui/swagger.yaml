@@ -204,10 +204,15 @@ components:
     FeedbackRequest:
       type: object
       required:
+        - email
         - description
         - rating
         - urgencyType
       properties:
+        email:
+          type: string
+          description: Feedback text.
+          example: teste@teste.com
         description:
           type: string
           description: Feedback text.

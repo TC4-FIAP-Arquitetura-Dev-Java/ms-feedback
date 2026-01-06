@@ -18,6 +18,7 @@ public interface FeedbackDocumentMapper {
 
     @Mapping(target = "id", expression = "java(document.getId() != null ? String.valueOf(document.getId()) : null)")
     @Mapping(target = "sentDate", expression = "java(toOffsetDateTime(document.getSentDate()))")
+    @Mapping(target = "email", ignore = true)
     FeedbackDomain toDomain(FeedbackDocument document);
 
     @Mapping(target = "id", expression = "java(toLongId(domain.getId()))")
