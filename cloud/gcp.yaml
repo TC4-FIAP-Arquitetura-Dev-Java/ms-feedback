@@ -1,0 +1,112 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: ms-feedback
+  namespace: '780675609467'
+  selfLink: /apis/serving.knative.dev/v1/namespaces/780675609467/services/ms-feedback
+  uid: 4d140135-d4e2-4ca7-bd09-186f60f5a5f7
+  resourceVersion: AAZHrP+ii80
+  generation: 29
+  creationTimestamp: '2026-01-02T21:46:34.261571Z'
+  labels:
+    commit-sha: 347796bd634777001014ba67668c77276521f057
+    gcb-build-id: f73a7bd2-3d66-4971-a77b-a1f2c67b65e1
+    gcb-trigger-id: 06a7e57b-7242-4338-bb82-70e30cd6e565
+    gcb-trigger-region: global
+    managed-by: gcp-cloud-build-deploy-cloud-run
+    cloud.googleapis.com/location: us-central1
+  annotations:
+    serving.knative.dev/creator: dpcamargo@gmail.com
+    serving.knative.dev/lastModifier: 780675609467-compute@developer.gserviceaccount.com
+    run.googleapis.com/client-name: gcloud
+    run.googleapis.com/client-version: 550.0.0
+    run.googleapis.com/operation-id: 70e181d4-7378-4987-8f05-e4c16551d51e
+    run.googleapis.com/ingress: all
+    run.googleapis.com/ingress-status: all
+    run.googleapis.com/invoker-iam-disabled: 'true'
+    run.googleapis.com/maxScale: '1'
+    run.googleapis.com/urls: '["https://ms-feedback-780675609467.us-central1.run.app","https://ms-feedback-p72ngdpwvq-uc.a.run.app"]'
+spec:
+  template:
+    metadata:
+      labels:
+        client.knative.dev/nonce: kabpibpdxr
+        commit-sha: 347796bd634777001014ba67668c77276521f057
+        gcb-build-id: f73a7bd2-3d66-4971-a77b-a1f2c67b65e1
+        gcb-trigger-id: 06a7e57b-7242-4338-bb82-70e30cd6e565
+        gcb-trigger-region: global
+        managed-by: gcp-cloud-build-deploy-cloud-run
+        run.googleapis.com/startupProbeType: Default
+      annotations:
+        autoscaling.knative.dev/maxScale: '1'
+        run.googleapis.com/client-name: gcloud
+        run.googleapis.com/client-version: 550.0.0
+        run.googleapis.com/cloudsql-instances: fiap-474820:us-central1:sql-ms-feedback
+        run.googleapis.com/execution-environment: gen2
+    spec:
+      containerConcurrency: 80
+      timeoutSeconds: 300
+      serviceAccountName: sa-ms-feedback@fiap-474820.iam.gserviceaccount.com
+      containers:
+        - name: placeholder-1
+          image: us-central1-docker.pkg.dev/fiap-474820/cloud-run-source-deploy/ms-feedback/ms-feedback:347796bd634777001014ba67668c77276521f057
+          ports:
+            - name: http1
+              containerPort: 8080
+          env:
+            - name: FEEDBACK_PORT
+              value: '8080'
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:mysql://google/ms_feedback?socketFactory=com.google.cloud.sql.mysql.SocketFactory&cloudSqlInstance=fiap-474820:us-central1:sql-ms-feedback&useSSL=false&serverTimezone=UTC
+            - name: SPRING_DATASOURCE_USERNAME
+              value: runuser
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: RunUser_12345
+            - name: REDEPLOY
+              value: '3'
+            - name: SPRING_JPA_HIBERNATE_DDL_AUTO
+              value: update
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  key: latest
+                  name: JWT_SECRET
+            - name: JWT_REFRESH_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  key: latest
+                  name: JWT_REFRESH_TOKEN
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 512Mi
+          startupProbe:
+            timeoutSeconds: 240
+            periodSeconds: 240
+            failureThreshold: 1
+            tcpSocket:
+              port: 8080
+  traffic:
+    - percent: 100
+      latestRevision: true
+status:
+  observedGeneration: 29
+  conditions:
+    - type: Ready
+      status: 'True'
+      lastTransitionTime: '2026-01-06T00:10:09.053645Z'
+    - type: ConfigurationsReady
+      status: 'True'
+      lastTransitionTime: '2026-01-06T00:09:24.018878Z'
+    - type: RoutesReady
+      status: 'True'
+      lastTransitionTime: '2026-01-06T00:10:09.018512Z'
+  latestReadyRevisionName: ms-feedback-00028-mb9
+  latestCreatedRevisionName: ms-feedback-00028-mb9
+  traffic:
+    - revisionName: ms-feedback-00028-mb9
+      percent: 100
+      latestRevision: true
+  url: https://ms-feedback-p72ngdpwvq-uc.a.run.app
+  address:
+    url: https://ms-feedback-p72ngdpwvq-uc.a.run.app
