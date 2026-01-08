@@ -4,7 +4,6 @@ import com.ms.feedback.application.gateway.FeedbackReportWeekGateway;
 import com.ms.feedback.domain.model.FeedbackReportDomain;
 import com.ms.feedback.domain.model.ReportByDayDomain;
 import com.ms.feedback.domain.model.ReportByUrgencyTypeDomain;
-import com.ms.feedback.infrastructure.database.mappers.FeedbackDocumentMapper;
 import com.ms.feedback.infrastructure.database.projection.ReportByDayProjection;
 import com.ms.feedback.infrastructure.database.repositories.FeedbackRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +17,6 @@ import java.util.List;
 public class FeedbackReportWeekGatewayImpl implements FeedbackReportWeekGateway {
 
     private final FeedbackRepository feedbackRepository;
-    private final FeedbackDocumentMapper feedbackDocumentMapper;
 
     @Override
     public FeedbackReportDomain findFeedbackReportsWeek() {
